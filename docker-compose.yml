@@ -1,0 +1,116 @@
+version: '3.8'
+
+services:
+  # Headwind MDM pour Android
+  headwind-mdm:
+    image: headwindmdm/hmdm:latest
+    container_name: headwind-mdm
+    ports:
+      - "8080:8080"
+    environment:
+      - HMDM_DB_HOST=postgres
+      - HMDM_DB_PORT=5432
+      - HMDM_DB_NAME=hmdm
+      - HMDM_DB_USER=hmdm
+      - HMDM_DB_PASSWORD=ChangeMeSecurePassword123!
+      - HMDM_BASE_URL=https://mdm.votre-domaine.com
+    depends_on:
+      - postgres
+    volumes:
+      - headwind-data:/opt/hmdm/files
+    restart: unless-stopped
+    networks:
+      - mdm-network
+
+  # PostgreSQL pour Headwind MDM
+  postgres:
+    image: postgres:14-alpine
+    container_name: mdm-postgres
+    environment:
+      - POSTGRES_DB=hmdm
+      - POSTGRES_USER=hmdm
+      - POSTGRES_PASSWORD=ChangeMeSecurePassword123!
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - mdm-network
+
+  # MicroMDM pour iOS/macOS
+  micromdm:
+    image: micromdm/micromdm:latest
+    container_name: micromdm
+    ports:
+      - "8081:8080"
+      - "443:443"
+    environment:
+      - MICROMDM_API_KEY=your-secure-api-key-here-change-me
+      - MICROMDM_SERVER_URL=https://mdm.votre-domaine.com:443
+      - MICROMDM_TLS_CERT=/certs/server.crt
+      - MICROMDM_TLS_KEY=/certs/server.key
+    volumes:
+      - micromdm-data:/var/lib/micromdm
+      - ./certs:/certs:ro
+    command: >
+      serve
+      -api-key ${MICROMDM_API_KEY}
+      -server-url ${MICROMDM_SERVER_URL}
+      -tls-cert ${MICROMDM_TLS_CERT}
+      -tls-key ${MICROMDM_TLS_KEY}
+    restart: unless-stopped
+    networks:
+      - mdm-network
+
+  # Nginx comme reverse proxy
+  nginx:
+    image: nginx:alpine
+    container_name: mdm-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./certs:/etc/nginx/certs:ro
+      - nginx-logs:/var/log/nginx
+    depends_on:
+      - headwind-mdm
+      - micromdm
+    restart: unless-stopped
+    networks:
+      - mdm-network
+
+  # Script d'intégration avec Tactical RMM
+  mdm-integration:
+    build:
+      context: ./integration
+      dockerfile: Dockerfile
+    container_name: mdm-integration
+    environment:
+      - TRMM_URL=https://votre-tactical-rmm.com
+      - TRMM_API_KEY=votre-api-key-tactical-rmm
+      - MICROMDM_URL=http://micromdm:8080
+      - MICROMDM_API_KEY=your-secure-api-key-here-change-me
+      - HEADWIND_URL=http://headwind-mdm:8080
+      - HEADWIND_USER=admin
+      - HEADWIND_PASSWORD=admin
+      - SYNC_INTERVAL=300
+    depends_on:
+      - headwind-mdm
+      - micromdm
+    restart: unless-stopped
+    networks:
+      - mdm-network
+    volumes:
+      - ./integration:/app
+      - integration-logs:/var/log/mdm-integration
+
+volumes:
+  headwind-data:
+  postgres-data:
+  micromdm-data:
+  nginx-logs:
+  integration-logs:
+
+networks:
+  mdm-network:
+    driver: bridge
