@@ -302,34 +302,40 @@ class MDMIntegrationService:
     
     def update_device_in_trmm(self, device_data: Dict):
         """Met à jour ou crée un appareil dans Tactical RMM"""
-        # Note: Tactical RMM n'a pas d'API directe pour créer des "agents" mobiles
-        # Cette approche utilise les custom fields sur des agents existants
-        # Vous devrez adapter selon votre structure
-        
         logger.info(f"Mise à jour de l'appareil: {device_data['device_name']} ({device_data['device_type']})")
         
-        # Chercher un agent correspondant par serial number ou créer une entrée
+        # Chercher un agent correspondant par serial number
         agents = self.trmm.get_agents()
         matching_agent = None
         
         for agent in agents:
-            if agent.get('MDM_Serial_Number') == device_data['serial_number']:
+            if agent.get('custom_fields', {}).get('MDM_Serial_Number') == device_data['serial_number']:
                 matching_agent = agent
                 break
         
         if matching_agent:
             # Mise à jour des custom fields
             agent_id = matching_agent['agent_id']
-            self.trmm.update_agent_custom_field(agent_id, 'MDM_Device_Type', device_data['device_type'])
-            self.trmm.update_agent_custom_field(agent_id, 'MDM_Device_Name', device_data['device_name'])
-            self.trmm.update_agent_custom_field(agent_id, 'MDM_OS_Version', device_data['os_version'])
-            self.trmm.update_agent_custom_field(agent_id, 'MDM_Last_Seen', device_data['last_seen'])
-            self.trmm.update_agent_custom_field(agent_id, 'MDM_Battery_Level', device_data['battery_level'])
-            self.trmm.update_agent_custom_field(agent_id, 'MDM_Managed', True)
-            self.trmm.update_agent_custom_field(agent_id, 'MDM_Platform', device_data['platform'])
-            logger.info(f"Agent mis à jour: {agent_id}")
+            success = True
+            success &= self.trmm.update_agent_custom_field(agent_id, 'MDM_Device_Type', device_data['device_type'])
+            success &= self.trmm.update_agent_custom_field(agent_id, 'MDM_Device_Name', device_data['device_name'])
+            success &= self.trmm.update_agent_custom_field(agent_id, 'MDM_OS_Version', device_data['os_version'])
+            success &= self.trmm.update_agent_custom_field(agent_id, 'MDM_Last_Seen', device_data['last_seen'])
+            success &= self.trmm.update_agent_custom_field(agent_id, 'MDM_Battery_Level', device_data['battery_level'])
+            success &= self.trmm.update_agent_custom_field(agent_id, 'MDM_Managed', True)
+            success &= self.trmm.update_agent_custom_field(agent_id, 'MDM_Platform', device_data['platform'])
+            
+            if success:
+                logger.info(f"Agent mis à jour: {agent_id}")
+            else:
+                logger.error(f"Échec de la mise à jour de l'agent: {agent_id}")
         else:
-            logger.warning(f"Aucun agent correspondant trouvé pour {device_data['serial_number']}")
+            logger.info(f"Nouvel appareil détecté: {device_data['device_name']} - {device_data['serial_number']}")
+            # Dans Tactical RMM, les appareils mobiles sont généralement créés via les profils d'enrollment
+            # ou doivent être ajoutés manuellement. On se limite ici à enregistrer les informations
+            # dans les logs pour une action manuelle ultérieure
+            logger.info(f"Veuillez créer manuellement un agent pour cet appareil dans Tactical RMM: "
+                       f"{device_data['device_name']} (SN: {device_data['serial_number']})")
 
 
 def main():
