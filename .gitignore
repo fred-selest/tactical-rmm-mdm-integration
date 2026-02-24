@@ -1,46 +1,455 @@
-```
 # Compiled and build artifacts
 *.pyc
 __pycache__/
+*.o
+*.obj
+*.class
+*.exe
+*.dll
+*.so
+*.a
+*.out
 
 # Dependencies
-.venv/
+node_modules/
 venv/
+.venv/
+.env
+.env.local
+.env.*
+
+# Build directories
+dist/
+build/
+target/
+*.egg-info/
 
 # Logs and temp files
 *.log
 *.tmp
 *.swp
-
-# Environment
-.env
-.env.local
-*.env.*
+*.swo
 
 # Editors
 .vscode/
 .idea/
+*.iml
 
-# Coverage reports
-.coverage
+# System files
+.DS_Store
+Thumbs.db
+.git/
+
+# Coverage
 coverage/
 htmlcov/
+.coverage
 
 # Python specific
-*.pyo
-*.pyd
-.Python
-*.so
-*.egg-info/
+*.pyc
+__pycache__/
+.mypy_cache/
+.pytest_cache/
 
-# Distribution / packaging
+# Compressed files
+*.zip
+*.gz
+*.tar
+*.tgz
+*.bz2
+*.xz
+*.7z
+*.rar
+*.zst
+*.lz4
+*.lzh
+*.cab
+*.arj
+*.rpm
+*.deb
+*.Z
+*.lz
+*.lzo
+*.tar.gz
+*.tar.bz2
+*.tar.xz
+*.tar.zst
+
+# Gradle
+.gradle/
+
+# Go
+*.mod
+*.sum
+
+# Rust
+Cargo.lock
+*.rs.bk
+
+# Java
+*.jar
+*.war
+*.ear
+hs_err_pid*.log
+
+# C/C++
+*.a
+*.lib
+*.obj
+*.o
+*.so
+*.dylib
+*.dll
+*.exe
+
+# Node.js
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ruby
+*.gem
+.bundle/
+.rbenv-gemsets
+.rbenv-version
+
+# PHP
+vendor/
+
+# .NET
+bin/
+obj/
+*.userprefs
+*.pidb
+*.suo
+*.user
+*.aps
+*.ncb
+*.ilk
+*.meta
+*.prefab
+*.pdb
+*.rsp
+*.sln.docstates
+*.vcxproj.filters
+
+# Android
+*.apk
+*.aar
+*.ap_
+app/build/
+.gradle/
+local.properties
+
+# Xcode
+*.xcconfig
+*.xctest
+*.xcscheme
+*.xcworkspace
+project.xcworkspace
+xcuserdata/
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.pbxuser
+*.entitlements
+*.processed
+
+# Visual Studio
+*.sln
+*.csproj
+*.userprefs
+*.pidb
+*.suo
+*.user
+*.aps
+*.ncb
+*.ilk
+*.meta
+*.prefab
+*.pdb
+*.rsp
+*.sln.docstates
+*.vcxproj.filters
+
+# Linux
+*~
+\#*\#
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Windows
+Desktop.ini
+$RECYCLE.BIN/
+Thumbs.db
+desktop.ini
+
+# Temporary folders
+tmp/
+temp/
+.cache/
+.tmux/
+
+# Database
+*.db
+*.db-journal
+
+# Backup files
+*.bak
+*.backup
+*.old
+*.orig
+*~
+
+# Environment specific
+.env
+.env.local
+.env.*
+!.env.example
+
+# Test coverage
+coverage.xml
+*.gcov
+*.lcov
+
+# IDE specific
+.vs/
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build outputs
 dist/
 build/
-*.egg
-*.whl
-pip-log.txt
-pip-delete-this-directory.txt
+target/
+out/
+_output/
+public/
 
-# Pytest cache
-.pytest_cache/
-```
+# Dependency directories
+node_modules/
+vendor/
+deps/
+dependencies/
+third_party/
+
+# Virtual environments
+venv/
+.venv/
+env/
+.env/
+pyenv/
+.virtualenv/
+
+# Configuration
+.config/
+
+# Logs
+*.log
+*.out
+*.pid
+*.seed
+
+# Runtime data
+*.pid
+*.seed
+*.sock
+*.pid.lock
+
+# Local configuration
+*.local
+config.local
+settings.local
+
+# Temporary files
+*.tmp
+*.temp
+*.cache
+*.lock
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Package manager caches
+.npm/
+.yarn/
+.bower-cache/
+.bower-registry/
+.bower-tmp/
+.jspm/
+.pip/
+.pip-tools/
+
+# Documentation
+docs/_build/
+_site/
+
+# CI/CD
+.circleci/
+.travis.yml
+.github/
+.gitlab-ci.yml
+
+# Docker
+.docker/
+docker-compose*.yml
+!docker-compose.yml
+
+# Editor backup files
+*~
+*.bak
+*.swp
+*.swo
+
+# Compiled binary files
+*.o
+*.a
+*.obj
+*.elf
+*.axf
+*.bin
+*.hex
+*.i
+*.lai
+*.la
+*.lo
+*.pyc
+*.pyo
+*.pyd
+*.so
+*.dll
+*.exe
+*.out
+*.app
+*.dylib
+*.jar
+*.war
+*.sar
+*.har
+*.par
+*.sca
+*.car
+*.hpi
+*.jpi
+*.hpl
+*.mpl
+*.xpi
+*.crx
+*.xap
+*.xap
+*.msi
+*.deb
+*.rpm
+*.pkg
+*.dmg
+*.iso
+*.img
+*.toast
+*.vcd
+*.vhd
+*.vhdx
+*.vmdk
+*.ova
+*.ovf
+*.box
+*.vagrant
+*.gem
+*.nupkg
+*.zip
+*.tar
+*.gz
+*.bz2
+*.xz
+*.7z
+*.rar
+*.jar
+*.war
+*.ear
+*.apk
+*.aab
+*.ipa
+*.appx
+*.msix
+*.deb
+*.rpm
+*.snap
+*.flatpak
+*.appimage
+*.dmg
+*.iso
+*.img
+*.toast
+*.vcd
+*.vhd
+*.vhdx
+*.vmdk
+*.ova
+*.ovf
+*.box
+*.vagrant
+*.gem
+*.nupkg
+*.whl
+*.egg
+*.egg-info
+*.eggs
+*.dist-info
+*.pth
+*.pyc
+*.pyo
+*.pyd
+*.so
+*.dll
+*.exe
+*.out
+*.app
+*.dylib
+*.jar
+*.war
+*.ear
+*.sar
+*.par
+*.sca
+*.car
+*.hpi
+*.jpi
+*.hpl
+*.mpl
+*.xpi
+*.crx
+*.xap
+*.msi
+*.deb
+*.rpm
+*.pkg
+*.dmg
+*.iso
+*.img
+*.toast
+*.vcd
+*.vhd
+*.vhdx
+*.vmdk
+*.ova
+*.ovf
+*.box
+*.vagrant
+*.gem
+*.nupkg
